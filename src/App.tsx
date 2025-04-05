@@ -1,8 +1,35 @@
-import Icon from "./components/icon";
+import { useEffect, useState } from "react";
+import Button from "./components/button";
+import Footer from "./components/footer";
+import QuotesCard from "./components/quotes-card";
+import { fetchRandomQuote, type Quote } from "./lib";
 
 export default function App() {
+  const [quote, setQuote] = useState<Quote | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleFetchRandomQuote = async () => {
+    setIsLoading(true);
+    const quote = await fetchRandomQuote();
+    setQuote(quote);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchRandomQuote();
+    let active = true;
+    fetchRandomQuote().then((quote) => {
+      if (active) {
+        setQuote(quote);
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
-    <div className="container mx-auto py-16 px-6">
+    <div className="w-fit mx-auto py-16 px-6">
       <h1 className="text-5xl font-bold text-center">
         Random Quotes Generator
       </h1>
@@ -12,21 +39,10 @@ export default function App() {
         先人の知恵に触れて、モチベーションを高めましょう！
       </p>
       <div className="w-fit mt-8 mx-auto">
-        <button className="w-fit px-7 py-3 flex items-center justify-center rounded-xl bg-black text-white cursor-pointer hover:bg-zinc-800">
-          <Icon className="inline-block w-5 h-auto fill-white mr-2" />
-          Generate
-        </button>
+        <Button handleFetchRandomQuote={handleFetchRandomQuote} />
       </div>
-      <div className="relative max-w-2xl min-h-96 sm:aspect-video mx-auto mt-8 bg-gradient-to-tl from-blue-950 to-blue-800 text-white rounded-xl p-8 sm:p-11 grid place-items-center">
-        <p className="absolute top-10 left-10 size-16 rounded-full grid place-items-center bg-blue-200 text-3xl">💬</p>
-        <div className="flex flex-col items-center justify-center gap-15 mt-10">
-          <p>AI is a fundamental risk to the existence of human civilization.</p>
-          <p>by Elon Musk</p>
-        </div>
-      </div>
-      <footer className="py-10 text-center">
-        <small>Created by{" "}<a href="#" className="text-blue-700">@your-handle</a>{" "}&copy;{" "}{new Date().getFullYear()}</small>
-      </footer>
+      <QuotesCard quote={quote} isLoading={isLoading} />
+      <Footer />
     </div>
   );
 }
