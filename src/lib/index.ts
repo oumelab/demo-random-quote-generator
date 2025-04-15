@@ -4,15 +4,14 @@ export type Quote = {
   quote: string;
 };
 
+const BASE_URL = "https://b13o.github.io/tech-quotes-api";
+
 export const fetchRandomQuote = async (): Promise<Quote> => {
+  const id = Math.floor(Math.random() * 100) + 1;
   const response = await fetch(
-    "https://strangerthingsquotes.shadowdev.xyz/api/quotes"
+    `${BASE_URL}/api/quotes/${id}`
     // "https://programming-quotesapi.vercel.app/api/random"
 );
   const data = await response.json();
-  return {
-    author: data[0].author,
-    quote: data[0].quote,
-  };
-
+  return data;
 };
