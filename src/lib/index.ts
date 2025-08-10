@@ -12,6 +12,10 @@ export const fetchRandomQuote = async (): Promise<Quote> => {
     `${BASE_URL}/api/quotes/${id}`
     // "https://programming-quotesapi.vercel.app/api/random"
 );
+if (!response.ok) {
+  throw new Error(`HTTP error! status: ${response.status}`);
+}
+
   const data = await response.json();
   return data;
 };

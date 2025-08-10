@@ -31,9 +31,8 @@ export default function App() {
         <p className="absolute top-10 left-10 size-16 rounded-full grid place-items-center bg-blue-200 text-3xl">
           💬
         </p>
-        <div className="flex flex-col items-center justify-center gap-15 mt-10">
-          <QuotesCard quotePromise={quotePromise} />
-        </div>
+
+        <QuotesCard quotePromise={quotePromise} />
       </div>
       <Footer />
     </div>
